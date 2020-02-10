@@ -7,8 +7,10 @@ import VueRouter from 'vue-router'
 import Login from '@/views/login.vue'
 // 首页
 import Home from '@/views/home.vue'
-//
+// 欢迎页
 import Welcome from '@/views/welcome.vue'
+// 用户列表页
+import Suer from '@/views/suers/suer.vue'
 
 // 使用
 Vue.use(VueRouter)
@@ -44,6 +46,11 @@ var router = new VueRouter({
           path: 'welcome',
           name: 'welcome',
           component: Welcome
+        },
+        {
+          path: 'suer',
+          name: 'suer',
+          component: Suer
         }
       ]
     }

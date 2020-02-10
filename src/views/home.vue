@@ -8,7 +8,6 @@
           :collapse="isCollapse"
           :router="true"
           :unique-opened="true"
-          :default-active="'2-1'"
           class="el-menu-vertical-demo"
           background-color="#466248"
           text-color="#0AC6F7"
@@ -20,7 +19,7 @@
               <span>用户管理</span>
             </template>
 
-            <el-menu-item index="1-1">
+            <el-menu-item index="/home/suer">
               <i class="el-icon-bicycle" style="color: #F705F7; font-size: 20px;"></i>
               <span>用户列表</span>
             </el-menu-item>
@@ -47,8 +46,11 @@
 
       <el-container>
         <el-header>
-          <div @click="isCollapse = !isCollapse" class="iconfont icon-caidanguanli" style="color: #F51AE3; font-size: 35px;">
-          </div>
+          <div
+            @click="isCollapse = !isCollapse"
+            class="iconfont icon-caidanguanli"
+            style="color: #F51AE3; font-size: 35px;"
+          ></div>
           <div>电商管理后台系统</div>
           <a href="javascript:;">退出</a>
         </el-header>
