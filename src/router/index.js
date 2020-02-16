@@ -11,6 +11,9 @@ import Home from '@/views/home.vue'
 import Welcome from '@/views/welcome.vue'
 // 用户列表页
 import Suer from '@/views/suers/suer.vue'
+// 权限列表
+import Rights from '@/views/right/rights.vue'
+import Roles from '@/views/right/roles.vue'
 
 // 使用
 Vue.use(VueRouter)
@@ -51,6 +54,16 @@ var router = new VueRouter({
           path: 'suer',
           name: 'suer',
           component: Suer
+        },
+        {
+          path: 'rights',
+          name: 'rigthts',
+          component: Rights
+        },
+        {
+          path: 'roles',
+          name: 'roles',
+          component: Roles
         }
       ]
     }

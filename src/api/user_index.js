@@ -58,3 +58,12 @@ export const updateUserStatae = (uid, type) => {
     method: 'put'
   })
 }
+
+// 角色分配用户
+export const grantUserRole = (data) => {
+  return axios({
+    url: `users/${data.id}/role`,
+    method: 'put',
+    data: { rid: data.rid }
+  })
+}

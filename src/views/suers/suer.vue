@@ -41,14 +41,8 @@
             <el-tooltip class="item" effect="dark" content="编辑" placement="top">
               <el-button class="el-icon-edit" @click="showEditDialog(scope.row)"></el-button>
             </el-tooltip>
-            <el-tooltip
-              class="item"
-              effect="dark"
-              @click="allotdialogFormVisible"
-              content="分配角色"
-              placement="top"
-            >
-              <el-button class="el-icon-share"></el-button>
+            <el-tooltip class="item" effect="dark" content="分配角色" placement="top">
+              <el-button class="el-icon-share" @click="showGrantDialog(scope.row)"></el-button>
             </el-tooltip>
             <el-tooltip class="item" effect="dark" content="珊除" placement="top">
               <el-button class="el-icon-delete" @click="del(scope.row.id)"></el-button>
@@ -94,8 +88,8 @@
     <!-- 编辑用户 -->
     <el-dialog title="添加用户" :visible.sync="editdialogFormVisible">
       <el-form :model="editform" ref="editform" :label-width="'80px'" :rules="rules">
-        <el-form-item label="用户名" prop="username">
-          <el-input v-model="editform.username" autocomplete="off"></el-input>
+        <el-form-item label="用户名">
+          <el-input v-model="editform.username" style="width:100px" disabled autocomplete="off"></el-input>
         </el-form-item>
 
         <el-form-item label="邮箱" prop="email">
@@ -112,15 +106,25 @@
       </div>
     </el-dialog>
     <!-- 分配角色 -->
-    <el-dialog title="分配角色" :visible.sync="allotdialogFormVisible">
-      <el-form :model="allottform" ref="editform" :label-width="'80px'" :rules="rules">
+    <el-dialog title="分配角色" :visible.sync="grantdialogFormVisible">
+      <el-form :model="grantform" ref="grantform" :label-width="'80px'">
         <el-form-item label="用户名" prop="username">
-
+          <span>{{grantform.username}}</span>
+        </el-form-item>
+        <el-form-item label="角色">
+          <el-select v-model="grantform.rid" clearable placeholder="请选择角色">
+            <el-option
+              v-for="item in roleList"
+              :key="item.id"
+              :label="item.roleName"
+              :value="item.id"
+            ></el-option>
+          </el-select>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="allotdialogFormVisible = false">取 消</el-button>
-        <el-button type="primary">确 定</el-button>
+        <el-button @click="grantdialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="grantrole">确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -132,13 +136,21 @@ import {
   addUser,
   editUser,
   delUserById,
-  updateUserStatae
+  updateUserStatae,
+  grantUserRole
 } from '@/api/user_index.js'
+import { getAllRolelist } from '@/api/role_index.js'
 export default {
   data () {
     return {
       // 分配角色
-      allotdialogFormVisible: false,
+      grantdialogFormVisible: false,
+      roleList: [],
+      grantform: {
+        id: '',
+        rid: '',
+        username: ''
+      },
       // 编辑
       editdialogFormVisible: false,
       editform: {
@@ -190,11 +202,35 @@ export default {
     }
   },
   methods: {
-    // 分配角色
+    // 展示分配角色
+    showGrantDialog (row) {
+      this.grantdialogFormVisible = true
+      this.grantform.id = row.id
+      this.grantform.rid = row.rid
+      this.grantform.username = row.username
+    },
+    // 用户角色
+    async grantrole () {
+      if (!this.grantform.rid) {
+        this.$message({
+          type: 'warnig',
+          message: '请选择一个角色'
+        })
+      } else {
+        let res = await grantUserRole(this.grantform)
+        if (res.data.meta.status === 200) {
+          this.$message({
+            type: 'success',
+            message: '设置角色成功'
+          })
+          this.grantdialogFormVisible = false
+          this.init()
+        }
+      }
+    },
     // 修改用户状态
     async changeState (id, type) {
       let res = await updateUserStatae(id, type)
-      console.log(res)
       if (res.data.meta.status === 200) {
         this.$message({
           type: 'success',
@@ -247,7 +283,6 @@ export default {
     // 编辑提交
     async editsubmit () {
       let res = await editUser(this.editform)
-      console.log(res)
       if (res.data.meta.status === 200) {
         this.$message({
           type: 'success',
@@ -263,7 +298,6 @@ export default {
     },
     // 编辑用户对话框
     showEditDialog (row) {
-      // console.log(row)
       this.editdialogFormVisible = true
       this.editform.id = row.id
       this.editform.username = row.username
@@ -278,7 +312,6 @@ export default {
           // 调用接口方法
           addUser(this.addform)
             .then(res => {
-              console.log('你大爷', res)
               if (res.data.meta.status === 201) {
                 this.$message({
                   type: 'success',
@@ -306,7 +339,6 @@ export default {
     },
     // 切换每页显示数量时触发
     handleSizeChange (val) {
-      console.log(`每页 ${val} 条`)
       // 修改全局pagesize
       this.userobj.pagesize = val
       // 重新获取数据
@@ -314,7 +346,6 @@ export default {
     },
     // 切换当前页码时触发
     handleCurrentChange (val) {
-      console.log(`当前页：${val}`)
       // 修改全局pagenum
       this.userobj.pagenum = val
       // 重新获取数据
@@ -324,7 +355,6 @@ export default {
     init () {
       getAllUserList(this.userobj)
         .then(res => {
-          console.log(res)
           if (res.data.meta.status === 200) {
             this.userList = res.data.data.users
             // 总记录数
@@ -334,10 +364,16 @@ export default {
         .catch(err => {
           console.log(err)
         })
+    },
+    // 获取所有角色数据
+    async roleListInit () {
+      let res = await getAllRolelist()
+      this.roleList = res.data.data
     }
   },
   mounted () {
     this.init()
+    this.roleListInit()
   }
 }
 </script>

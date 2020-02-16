@@ -11,7 +11,7 @@
           class="el-menu-vertical-demo"
           background-color="#466248"
           text-color="#0AC6F7"
-          active-text-color="#A2F703"
+          active-text-color="#A5FA05"
         >
           <el-submenu index="1">
             <template slot="title">
@@ -23,6 +23,10 @@
               <i class="el-icon-bicycle" style="color: #F705F7; font-size: 20px;"></i>
               <span>用户列表</span>
             </el-menu-item>
+            <el-menu-item index="1-2">
+              <i class="el-icon-bicycle" style="color: #F705F7; font-size: 20px;"></i>
+              <span>用户列表</span>
+            </el-menu-item>
           </el-submenu>
           <!-- 权限管理 -->
           <el-submenu index="2">
@@ -31,12 +35,12 @@
               <span>权限管理</span>
             </template>
 
-            <el-menu-item index="2-1">
+            <el-menu-item index="/home/roles">
               <i class="el-icon-bicycle" style="color: #F705F7; font-size: 20px;"></i>
               <span>角色列表</span>
             </el-menu-item>
 
-            <el-menu-item index="2-2">
+            <el-menu-item index="/home/rights">
               <i class="el-icon-bicycle" style="color: #F705F7; font-size: 20px;"></i>
               <span>权限列表</span>
             </el-menu-item>
