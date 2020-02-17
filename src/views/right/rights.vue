@@ -9,8 +9,7 @@
     <el-button style="margin-bottom: 15px;" type="success" plain>添加角色</el-button>
     <!-- 添加表格 -->
       <el-table border :data="rightList" style="width: 100%">
-        <el-table-column type="expand" width="60"></el-table-column>
-        <el-table-column type="index" width="50"></el-table-column>
+        <el-table-column type="index" label="@" width="50"></el-table-column>
         <el-table-column prop="authName" label="角色名称" width="180"></el-table-column>
 
         <el-table-column prop="path" label="路径"></el-table-column>
@@ -49,7 +48,6 @@ export default {
   mounted () {
     getAllRightList('list')
       .then(res => {
-        console.log('你大爷哈', res)
         this.rightList = res.data.data
       })
       .catch(err => {
