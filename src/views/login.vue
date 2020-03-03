@@ -33,6 +33,8 @@ export default {
       loginForm: {
         username: 'admin',
         password: '123456'
+        // username: 'nian',
+        // password: '123321'
       },
       rules: {
         username: [
